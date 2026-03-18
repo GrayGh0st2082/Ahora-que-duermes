@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Ahora que duermes</title>
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #0f0f14, #1a1a2e);
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+    color: white;
+}
+
+/* SOBRE */
+.envelope {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 140px;
+    background: #c0392b;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 110px solid transparent;
+    border-right: 110px solid transparent;
+    border-bottom: 70px solid #e74c3c;
+    top: 0;
+}
+
+/* CARTA */
+.letter {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    width: 80%;
+    max-width: 700px;
+    height: 75%;
+    background: rgba(20,20,30,0.95);
+    padding: 40px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: all 1s ease;
+    overflow-y: auto;
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+}
+
+.letter.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+/* TEXTO */
+h1 {
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+#text {
+    white-space: pre-line;
+    line-height: 1.7;
+    font-size: 18px;
+}
+
+/* CORAZONES */
+.heart {
+    position: absolute;
+    color: #ff4d6d;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(100vh); opacity: 1; }
+    100% { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="envelope" onclick="openLetter()"></div>
+
+<div class="letter" id="letter">
+    <h1>Ahora que duermes</h1>
+    <div id="text"></div>
+</div>
+
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b6cfa0a89.mp3?filename=romantic-piano-11035.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const text = `Ahora que duermes  
+puedo decirlo todo  
+sin que el mundo intervenga.
+
+Tu respiración sostiene la noche,  
+la ordena,  
+la vuelve habitable.
+
+Y yo  
+me quedo aquí,  
+mirándote como si eso fuera suficiente  
+para no desbordarme.
+
+Durante el día  
+te digo que te amo  
+como quien deja caer algo pequeño  
+sobre una mesa.
+
+Pero esto—  
+esto no es pequeño.
+
+No cabe en la voz.
+
+Te amo de una forma que me excede,  
+que no sé contener  
+ni siquiera cuando te tengo cerca.
+
+Ahora que duermes  
+puedo decirlo sin medida,  
+sin miedo a que sea demasiado.
+
+Porque es demasiado.
+
+Y sin embargo  
+te amo así.
+
+Mañana volveré a decir lo de siempre,  
+pero ahora—  
+
+te digo la verdad completa:
+
+que no hay forma de este mundo  
+que me alcance  
+para amarte.`;
+
+// Abrir carta
+function openLetter() {
+    document.querySelector(".envelope").style.display = "none";
+    document.getElementById("letter").classList.add("show");
+
+    document.getElementById("music").play();
+
+    typeWriter();
+    createHearts();
+}
+
+// Máquina de escribir
+let i = 0;
+function typeWriter() {
+    if (i < text.length) {
+        document.getElementById("text").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, 25);
+    }
+}
+
+// Corazones
+function createHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML = "❤";
+
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (Math.random() * 20 + 10) + "px";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }, 250);
+}
+</script>
+
+</body>
+</html>
