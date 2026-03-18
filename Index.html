@@ -7,10 +7,9 @@
 <style>
 body {
     margin: 0;
-    background: linear-gradient(135deg, #0f0f14, #1a1a2e);
+    background: #0f0f14;
     overflow: hidden;
     font-family: 'Georgia', serif;
-    color: white;
 }
 
 /* SOBRE */
@@ -19,23 +18,25 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 220px;
-    height: 140px;
+    width: 200px;
+    height: 120px;
     background: #c0392b;
     cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 2;
 }
 
-.envelope::before {
+.envelope:before {
     content: "";
     position: absolute;
-    width: 0;
-    height: 0;
-    border-left: 110px solid transparent;
-    border-right: 110px solid transparent;
-    border-bottom: 70px solid #e74c3c;
     top: 0;
+    left: 0;
+    border-left: 100px solid transparent;
+    border-right: 100px solid transparent;
+    border-bottom: 60px solid #e74c3c;
+}
+
+.envelope.open {
+    transform: translate(-50%, -50%) rotateX(180deg);
 }
 
 /* CARTA */
@@ -43,17 +44,18 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) scale(0.5);
-    width: 80%;
-    max-width: 700px;
-    height: 75%;
-    background: rgba(20,20,30,0.95);
-    padding: 40px;
-    border-radius: 15px;
+    transform: translate(-50%, -50%) scale(0);
+    width: 70%;
+    max-width: 600px;
+    height: 70%;
+    background: #1c1c24;
+    color: #f5f5f5;
+    padding: 30px;
+    overflow-y: auto;
+    border-radius: 10px;
     opacity: 0;
     transition: all 1s ease;
-    overflow-y: auto;
-    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    z-index: 3;
 }
 
 .letter.show {
@@ -65,13 +67,11 @@ body {
 h1 {
     text-align: center;
     font-weight: normal;
-    margin-bottom: 20px;
 }
 
-#text {
+p {
+    line-height: 1.6;
     white-space: pre-line;
-    line-height: 1.7;
-    font-size: 18px;
 }
 
 /* CORAZONES */
@@ -79,11 +79,18 @@ h1 {
     position: absolute;
     color: #ff4d6d;
     animation: float 6s linear infinite;
+    font-size: 20px;
 }
 
 @keyframes float {
-    0% { transform: translateY(100vh); opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+    0% {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh);
+        opacity: 0;
+    }
 }
 </style>
 </head>
@@ -94,15 +101,8 @@ h1 {
 
 <div class="letter" id="letter">
     <h1>Ahora que duermes</h1>
-    <div id="text"></div>
-</div>
-
-<audio id="music" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5b6cfa0a89.mp3?filename=romantic-piano-11035.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-const text = `Ahora que duermes  
+    <p>
+Ahora que duermes  
 puedo decirlo todo  
 sin que el mundo intervenga.
 
@@ -145,30 +145,18 @@ te digo la verdad completa:
 
 que no hay forma de este mundo  
 que me alcance  
-para amarte.`;
+para amarte.
+    </p>
+</div>
 
-// Abrir carta
+<script>
 function openLetter() {
     document.querySelector(".envelope").style.display = "none";
     document.getElementById("letter").classList.add("show");
 
-    document.getElementById("music").play();
-
-    typeWriter();
     createHearts();
 }
 
-// Máquina de escribir
-let i = 0;
-function typeWriter() {
-    if (i < text.length) {
-        document.getElementById("text").innerHTML += text.charAt(i);
-        i++;
-        setTimeout(typeWriter, 25);
-    }
-}
-
-// Corazones
 function createHearts() {
     setInterval(() => {
         const heart = document.createElement("div");
@@ -180,8 +168,10 @@ function createHearts() {
 
         document.body.appendChild(heart);
 
-        setTimeout(() => heart.remove(), 6000);
-    }, 250);
+        setTimeout(() => {
+            heart.remove();
+        }, 6000);
+    }, 200);
 }
 </script>
 
